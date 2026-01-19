@@ -1,0 +1,16 @@
+{
+  "name": "doctor-appointment-booking",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Doctor Appointment Booking API (Express + MongoDB) with Idempotency, ETag, Pagination, and Logging",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^8.7.0"
+  }
+}

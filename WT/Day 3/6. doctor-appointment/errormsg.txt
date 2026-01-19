@@ -1,0 +1,40 @@
+Student IP: 10.11.16.70
+Original URL: http://10.11.16.70:3000
+Student IP from TOOFAAN: 10.11.16.70
+Updated URL: http://10.11.16.70:3000
+==============================
+Starting Tests
+==============================
+APP URL: http://10.11.16.70:3000
+--------------------------------
+
+Running 7 tests using 1 worker
+  ✘  1 app.spec.ts:40:7 › Appointments – Idempotency + Doctors Pagination › A1. Create appointment WITHOUT Idempotency-Key → should fail (0ms)
+  -  2 app.spec.ts:53:7 › Appointments – Idempotency + Doctors Pagination › A2. Create appointment WITH Idempotency-Key → no replay header
+  -  3 app.spec.ts:73:7 › Appointments – Idempotency + Doctors Pagination › A3. Replay SAME request with SAME Idempotency-Key → replay=true
+  -  4 app.spec.ts:90:7 › Appointments – Idempotency + Doctors Pagination › A4. Same Idempotency-Key with DIFFERENT payload → should fail
+  -  5 app.spec.ts:110:7 › Appointments – Idempotency + Doctors Pagination › B1. Offset pagination → second page should have 1 document
+  -  6 app.spec.ts:124:7 › Appointments – Idempotency + Doctors Pagination › B2. Cursor pagination → first request returns 2 doctors and nextCursor
+  -  7 app.spec.ts:138:7 › Appointments – Idempotency + Doctors Pagination › B3. Cursor pagination → second request returns 1 doctor and nextCursor=null
+  1) app.spec.ts:40:7 › Appointments – Idempotency + Doctors Pagination › A1. Create appointment WITHOUT Idempotency-Key → should fail 
+    TypeError: Cannot read properties of undefined (reading '0')
+      22 |     const doctorsRes = await request.get(`${BASE_URL}/doctors?limit=1`);
+      23 |     const doctors = await doctorsRes.json();
+    > 24 |     doctorId = doctors.items[0]._id;
+         |                             ^
+      25 |
+      26 |     // Fetch one available slot
+      27 |     const slotsRes = await request.get(
+  1 failed
+    app.spec.ts:40:7 › Appointments – Idempotency + Doctors Pagination › A1. Create appointment WITHOUT Idempotency-Key → should fail 
+  6 did not run
+--------------------------------
+
+==============================
+ TEST SUMMARY
+==============================
+Total Tests     : 7
+Passed        : 0
+Failed        :   1
+ Grade (auto)  : 0%
+==============================
