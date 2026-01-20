@@ -14,7 +14,6 @@ export const doctorsRouter = express.Router();
 // GET /doctors?city=&specialty=&page=&limit=
 // GET /doctors?mode=cursor&cursor=&limit=
 doctorsRouter.get('/', async (req, res, next) => {
-  //WRITE YOUR CODE HERE
   try {
     const { city, specialty, mode } = req.query;
 
@@ -43,20 +42,16 @@ doctorsRouter.get('/', async (req, res, next) => {
         : null;
 
       return res.json({
-        data: docs,
-        pageInfo: {
-          mode: 'cursor',
-          limit,
-          nextCursor,
-          hasNext
-        }
-      });
+        items: docs,
+        nextCursor,
+        hasNext
+        });
     }
 
     // ---------- Offset pagination (default) ----------
     const { limit, skip, page } = parseOffsetPagination(req.query);
 
-    const [data, total] = await Promise.all([
+    const [items, total] = await Promise.all([
       Doctor.find(baseFilter)
         .sort({ createdAt: 1, _id: 1 })
         .skip(skip)
@@ -65,7 +60,7 @@ doctorsRouter.get('/', async (req, res, next) => {
     ]);
 
     res.json({
-      data,
+      items,
       pageInfo: {
         mode: 'offset',
         page,
@@ -149,8 +144,8 @@ doctorsRouter.put('/:id', async (req, res, next) => {
 // GET /doctors/:id/availability?date=YYYY-MM-DD&mode=offset&page=1&limit=10
 // GET /doctors/:id/availability?date=YYYY-MM-DD&mode=cursor&cursor=&limit=10
 // Returns AVAILABLE slots for that date.
+// GET /doctors/:id/availability
 doctorsRouter.get('/:id/availability', async (req, res, next) => {
-  //WRITE YOUR CODE HERE
   try {
     const { date, mode } = req.query;
     const doctorId = req.params.id;
@@ -168,37 +163,27 @@ doctorsRouter.get('/:id/availability', async (req, res, next) => {
     if (mode === 'cursor') {
       const { limit, filter } = parseCursorPagination(req.query);
 
-      const queryFilter = {
-        ...baseFilter,
-        ...filter
-      };
-
-      const docs = await Slot.find(queryFilter)
+      const docs = await Slot.find({ ...baseFilter, ...filter })
         .sort({ createdAt: 1, _id: 1 })
         .limit(limit + 1);
 
       const hasNext = docs.length > limit;
       if (hasNext) docs.pop();
 
-      const nextCursor = hasNext
-        ? buildNextCursorFromDocs(docs)
-        : null;
+      const nextCursor = hasNext ? buildNextCursorFromDocs(docs) : null;
 
       return res.json({
-        data: docs,
-        pageInfo: {
-          mode: 'cursor',
-          limit,
-          nextCursor,
-          hasNext
+        items: docs,
+        nextCursor,
+        hasNext
         }
-      });
+      );
     }
 
-    // ---------- Offset pagination (default) ----------
+    // ---------- Offset pagination ----------
     const { limit, skip, page } = parseOffsetPagination(req.query);
 
-    const [data, total] = await Promise.all([
+    const [items, total] = await Promise.all([
       Slot.find(baseFilter)
         .sort({ createdAt: 1, _id: 1 })
         .skip(skip)
@@ -207,7 +192,7 @@ doctorsRouter.get('/:id/availability', async (req, res, next) => {
     ]);
 
     res.json({
-      data,
+      items,
       pageInfo: {
         mode: 'offset',
         page,
