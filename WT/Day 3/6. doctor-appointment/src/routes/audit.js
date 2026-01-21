@@ -19,11 +19,11 @@ auditRouter.get('/logs', async (req, res, next) => {
     const mode = String(req.query.mode || 'offset');
 
     if (mode === 'cursor') {
-      const { limit, cursor } = parseCursorPagination(req.query);
+      const { limit, cursor } = parseCursorPagination(req); // or req.query (both ok)
       const sort = { ts: -1, _id: -1 };
 
       const query = { ...filter };
-      if (cursor) {
+      if (cursor?.createdAt && cursor?.id) {
         query.$or = [
           { ts: { $lt: cursor.createdAt } },
           { ts: cursor.createdAt, _id: { $lt: new mongoose.Types.ObjectId(cursor.id) } }
@@ -31,23 +31,33 @@ auditRouter.get('/logs', async (req, res, next) => {
       }
 
       const docs = await AuditLog.find(query).sort(sort).limit(limit + 1);
-      const hasMore = docs.length > limit;
-      const pageDocs = hasMore ? docs.slice(0, limit) : docs;
-      const last = pageDocs[pageDocs.length - 1];
-      const nextCursor = hasMore && last ? encodeCursor({ createdAt: last.ts, id: last._id }) : null;
 
-      res.json({ mode: 'cursor', items: pageDocs, nextCursor, hasMore });
-      return;
+      const hasMore = docs.length > limit;
+      const items = hasMore ? docs.slice(0, limit) : docs;
+
+      const last = items[items.length - 1];
+      const nextCursor =
+        hasMore && last ? encodeCursor({ createdAt: last.ts, id: last._id }) : null;
+
+      return res.json({ mode: 'cursor', items, nextCursor, hasMore });
     }
 
-    const { page, limit, skip } = parseOffsetPagination(req.query);
+    // Offset pagination (use same stable sort keys)
+    const { page, limit, skip } = parseOffsetPagination(req);
     const [items, total] = await Promise.all([
-      AuditLog.find(filter).sort({ ts: -1 }).skip(skip).limit(limit),
+      AuditLog.find(filter).sort({ ts: -1, _id: -1 }).skip(skip).limit(limit),
       AuditLog.countDocuments(filter)
     ]);
 
-    res.json({ mode: 'offset', page, limit, total, totalPages: Math.ceil(total / limit), items });
+    return res.json({
+      mode: 'offset',
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+      items
+    });
   } catch (e) {
-    next(e);
+    return next(e);
   }
 });

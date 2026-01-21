@@ -8,7 +8,7 @@ export async function writeAudit({ req, action, entityType = '', entityId = '', 
       entityId,
       actorType,
       actorId,
-      requestId,
+      requestId: req.requestId,
       meta
     });
   } catch (e) {
