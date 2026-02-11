@@ -1,0 +1,33 @@
+Design and implement a concurrent evaluation system in Java using the Callable 
+interface, such that:
+    - Each student’s evaluation runs in parallel
+    - Each evaluation computes the total score from 5 exam sections
+    - A student evaluation fails only for that student if invalid marks are detected
+    - Other students’ evaluations continue unaffected
+    
+    
+Input Format:
+-------------
+N → Number of students
+N lines → Each line contains 5 space-separated integers (section marks)
+
+Output Format:
+--------------
+For each student:
+    - Print total score if evaluation succeeds
+    - Print failure message if evaluation fails
+
+
+Sample Input:
+-------------
+3
+80 75 90 85 70
+60 -10 70 80 90
+88 92 77 85 90
+
+Sample Output:
+--------------
+Student-1 Total = 400
+Evaluation failed for Student-2: Invalid marks detected
+Student-3 Total = 432
+

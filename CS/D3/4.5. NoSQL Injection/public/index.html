@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Injection Demo</title>
+  <style>
+    body { font-family: Arial; margin: 40px; }
+    input { display: block; margin: 10px 0; padding: 6px; width: 250px; }
+    button { margin-right: 10px; padding: 6px 12px; }
+    pre { background: #f4f4f4; padding: 10px; }
+  </style>
+</head>
+<body>
+
+<h2>Login Demo (Injection)</h2>
+
+<input id="username" placeholder="Username" />
+<input id="password" placeholder="Password" />
+
+<button onclick="login('login-vulnerable')">Login (Vulnerable)</button>
+<button onclick="login('login-secure')">Login (Secure)</button>
+
+<h3>Response:</h3>
+<pre id="result"></pre>
+
+<script src="script.js"></script>
+</body>
+</html>

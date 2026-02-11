@@ -1,0 +1,80 @@
+You are given a binary classification dataset and a single test sample.
+
+Instead of building full decision trees, this problem uses a simplified and 
+interpretable approach:
+    Each feature independently acts as a binary decision stump 
+    (a depth-1 decision tree).
+
+A decision stump uses:
+    - Only one feature
+    - Only one split threshold
+    - Exactly two partitions
+
+🧠 What a Decision Stump Means Here
+-----------------------------------
+For a given feature f, the decision stump:
+    - Selects a single threshold value
+    - Splits the training data into two partitions:
+        - Partition A: feature value ≤ threshold
+        - Partition B: feature value > threshold
+    - Uses Gini impurity to choose the best threshold
+    - Predicts a class (0 or 1) for the test sample based on the majority class 
+    of the matching partition
+
+⚠️ Even though only one feature is used, the split is binary by definition, 
+which is why two partitions always exist.
+
+🧩 Task Description
+-------------------
+For each feature independently:
+    - Treat the feature as a decision stump
+    - Try all possible thresholds derived from training data
+    - Compute the best threshold using Gini impurity
+    - Predict the class of the test sample using this stump
+    - Treat this prediction as one vote
+
+All feature-level predictions are then combined using Random Forest–style
+majority voting to produce the final predicted class.
+
+🧵 Multithreading Requirement
+-----------------------------
+Each feature’s decision stump evaluation must run in parallel
+Use one thread per feature
+Implement concurrency using:
+    - Callable
+    - ExecutorService
+
+📥 Input Format
+---------------
+N M
+N lines: M feature values each (training data)
+N class labels (0 or 1)
+M feature values (test sample)
+
+📤 Output Format
+----------------
+Feature Predictions: [p1, p2, ..., pM]
+Final Predicted Class: X
+
+
+Where:
+------
+pi is the prediction (0 or 1) from feature i
+X is the majority-voted final class
+In case of a tie, choose the smaller class label (0)
+
+📘 Sample Input
+---------------
+4 3
+2 3 1
+4 1 2
+6 5 3
+8 7 4
+0 0 1 1
+5 4 2
+
+📙 Sample Output
+----------------
+Feature Predictions: [1, 1, 0]                                                                                                                        
+Final Predicted Class: 1 
+

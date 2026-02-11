@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Profile</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 40px;
+    }
+    .card {
+      background: white;
+      padding: 30px;
+      max-width: 400px;
+      margin: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 16px;
+      border: none;
+      background: #d9534f;
+      color: white;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover {
+      background: #c9302c;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Profile</h2>
+    <p><strong>Email:</strong> <span id="email">Loading...</span></p>
+    <p><strong>Role:</strong> <span id="role">Loading...</span></p>
+
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <script>
+    async function loadProfile() {
+      const res = await fetch("/profile");
+
+      if (res.status === 401) {
+        window.location.href = "/";
+        return;
+      }
+
+      const data = await res.json();
+      document.getElementById("email").textContent = data.email;
+      document.getElementById("role").textContent = data.role;
+    }
+
+    async function logout() {
+      await fetch("/logout");
+      window.location.href = "/";
+    }
+
+    loadProfile();
+  </script>
+</body>
+</html>

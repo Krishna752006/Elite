@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SQL Injection Demo</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div class="container">
+    <h1>SQL Injection Demo</h1>
+    <div class="card">
+      <label>Username</label>
+      <input type="text" id="username" placeholder="Enter username" />
+
+      <label>Password</label>
+      <input type="text" id="password" placeholder="Enter password" />
+
+      <div class="buttons">
+        <button class="danger" onclick="vulnerableLogin()">
+          Login (Vulnerable)
+        </button>
+
+        <button class="safe" onclick="safeLogin()">
+          Login (Safe)
+        </button>
+      </div>
+
+      <pre id="output"></pre>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
