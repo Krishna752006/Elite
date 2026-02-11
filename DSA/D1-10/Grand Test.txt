@@ -1,0 +1,6 @@
+1. Sliding window max of mountain range
+
+2. Circle elimination and get the last one 
+5 3 res = 4
+
+3. Photos all friends at the lowest time
