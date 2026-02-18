@@ -1,0 +1,45 @@
+You are designing a multithreaded output controller that prints values from 1 to N.
+
+Four independent threads are created:
+    ThreadA → prints "Hi"
+    ThreadB → prints "Hello"
+    ThreadC → prints "HiHello"
+    ThreadD → prints the number itself
+
+The threads must follow these rules:
+    1. If the number is divisible by 3 only, print "Hi".
+    2. If the number is divisible by 5 only, print "Hello".
+    3. If the number is divisible by both 3 and 5, print "HiHello".
+    4. Otherwise, print the number.
+    5. Output must appear strictly in order from 1 to N.
+    6. All four threads run concurrently.
+    7. Proper synchronization must be implemented to avoid race conditions.
+
+Input Format:
+-------------
+Line-1: An integer N.
+
+Output Format:
+--------------
+Print a string array[].
+
+Constraints:
+• 1 <= n <= 10^4
+ 
+Sample Input-1:
+---------------
+4
+
+Sample Output-1:
+----------------
+1 2 Hi 4 
+
+
+Sample Input-2:
+---------------
+15
+
+Sample Output-2:
+----------------
+1 2 Hi 4 Hello Hi 7 8 Hi Hello 11 Hi 13 14 HiHello 
+
